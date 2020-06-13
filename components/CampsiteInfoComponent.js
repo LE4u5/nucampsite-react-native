@@ -16,51 +16,54 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = {
     postFavorite: campsiteId => (postFavorite(campsiteId)),
-    postComment:  (campsiteId, rating, author, text) => (postComment(campsiteId, rating, author, text))
+    postComment: (campsiteId, rating, author, text) => (postComment(campsiteId, rating, author, text))
 };
 
 function RenderCampsite({ campsite, favorite, markFavorite, onShowModal }) {
-    
 
-        const recognizeDrag = ({dx}) => (dx < -200) ? true : false;
-        const view = React.createRef();
+    const recognizeComment = ({ dx }) => (dx > 200) ? true : false;
+    const recognizeDrag = ({ dx }) => (dx < -200) ? true : false;
+    const view = React.createRef();
 
-        const panResponder = PanResponder.create({
-            onStartShouldSetPanResponder: () => true,
-            onPanResponderGrant: () => {
-                view.current.rubberBand(1000)
+    const panResponder = PanResponder.create({
+        onStartShouldSetPanResponder: () => true,
+        onPanResponderGrant: () => {
+            view.current.rubberBand(1000)
                 .then(endState => console.log(endState.finished ? 'finished' : 'canceled'))
-            },
-            onPanResponderEnd: (e, gestureState) => {
-                console.log('pan responder end', gestureState);
-                if (recognizeDrag(gestureState)){
-                    Alert.alert(
-                        'Add Favorite',
-                        'Are you sure you wish to add ' + campsite.name + ' to favorites?',
-                        [
-                            {
-                                text: 'Cancel',
-                                style: 'cancel',
-                                onPress: () => console.log('Cancel Pressed')
-                            },
-                            {
-                                text: 'OK',
-                                onPress: () => favorite ?
+        },
+        onPanResponderEnd: (e, gestureState) => {
+            console.log('pan responder end', gestureState);
+            if (recognizeDrag(gestureState)) {
+                Alert.alert(
+                    'Add Favorite',
+                    'Are you sure you wish to add ' + campsite.name + ' to favorites?',
+                    [
+                        {
+                            text: 'Cancel',
+                            style: 'cancel',
+                            onPress: () => console.log('Cancel Pressed')
+                        },
+                        {
+                            text: 'OK',
+                            onPress: () => favorite ?
                                 console.log('Already set as a favorite') : markFavorite()
-                            }
-                        ],
-                        {cancelable: false}
-                    );
-                }
-                return true;
+                        }
+                    ],
+                    { cancelable: false }
+                );
             }
-        });
+            else if (recognizeComment(gestureState)) {
+                onShowModal();
+            }
+            return true;
+        }
+    });
 
-if (campsite) {
+    if (campsite) {
         return (
-            <Animatable.View 
-                animation='fadeInDown' 
-                duration={2000} 
+            <Animatable.View
+                animation='fadeInDown'
+                duration={2000}
                 delay={1000}
                 ref={view}
                 {...panResponder.panHandlers}>
@@ -105,7 +108,7 @@ function RenderComments({ comments }) {
                 <Rating
                     startingValue={item.rating}
                     imageSize={10}
-                    style={{alignItems:'flex-start', paddingVertical: '5%'}}
+                    style={{ alignItems: 'flex-start', paddingVertical: '5%' }}
                     readonly
                 />
                 <Text style={{ fontSize: 12 }}>{`-- ${item.author}, ${item.date}`}</Text>
@@ -143,7 +146,7 @@ class CampsiteInfo extends Component {
     }
 
     handleComment(campsiteId) {
-        this.props.postComment(campsiteId,this.state.rating,this.state.author,this.state.text)
+        this.props.postComment(campsiteId, this.state.rating, this.state.author, this.state.text)
         this.toggleModal();
     }
 
@@ -209,13 +212,13 @@ class CampsiteInfo extends Component {
                             <Button
                                 color='#5637DD'
                                 title='Submit'
-                                onPress={()=>{
+                                onPress={() => {
                                     this.handleComment(campsiteId);
                                     this.resetForm();
                                 }}
                             />
                         </View>
-                        
+
                         <View style={styles.modalItems}>
                             <Button
                                 onPress={() => {

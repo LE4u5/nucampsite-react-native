@@ -17,7 +17,9 @@ const config = {
 
 export const ConfigureStore = () => {
     const store = createStore(
-        persistCombineReducers({
+        persistCombineReducers(
+            config,
+            {
             campsites,
             comments,
             partners,
