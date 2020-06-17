@@ -12,13 +12,13 @@ class Reservation extends Component {
             campers: 1,
             hikeIn: false,
             date: '',
-            showModal: false
+            // showModal: false
         }
     }
 
-    toggleModal() {
-        this.setState({ showModal: !this.state.showModal });
-    }
+    // toggleModal() {
+    //     this.setState({ showModal: !this.state.showModal });
+    // }
 
     static navigationOptions = {
         title: 'Reserve Campsite'
@@ -28,7 +28,7 @@ class Reservation extends Component {
         console.log(JSON.stringify(this.state));
         Alert.alert(
             'Begin Search?',
-            'Number of Campers: ' + this.state.campers + '\nHike-In? ' + this.state.hikeIn + '\nDate: ' + this.state.date,
+            'Number of Campers: ' + this.state.campers + '\n\nHike-In? ' + this.state.hikeIn + '\n\nDate: ' + this.state.date,
             [
                 {
                     text: 'Cancel',
@@ -47,7 +47,7 @@ class Reservation extends Component {
             campers: 1,
             hikeIn: false,
             date: '',
-            showModal: false
+            // showModal: false
         });
     }
 
