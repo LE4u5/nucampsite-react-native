@@ -9,7 +9,7 @@ import { createStackNavigator, createDrawerNavigator, DrawerItems } from 'react-
 import { Icon } from 'react-native-elements';
 import SafeAreaView from 'react-native-safe-area-view';
 import { connect } from 'react-redux';
-import { fetchCampsites, fetchComments, fetchPromotions, fetchPartners} from '../redux/ActionCreators';
+import { fetchCampsites, fetchComments, fetchPromotions, fetchPartners } from '../redux/ActionCreators';
 import Reservation from './ReservationComponent';
 import Favorites from './FavoritesComponent';
 import Login from './LoginComponent';
@@ -193,12 +193,12 @@ const CustomDrawerContentComponent = props => (
     <ScrollView>
         <SafeAreaView
             style={styles.container}
-            forceInset={{top: 'always', horizontal: 'never'}}>
+            forceInset={{ top: 'always', horizontal: 'never' }}>
             <View style={styles.drawerHeader}>
-                <View style={{flex: 1}}>
+                <View style={{ flex: 1 }}>
                     <Image source={require('./images/logo.png')} style={styles.drawerImage} />
                 </View>
-                <View style={{flex: 2}}>
+                <View style={{ flex: 2 }}>
                     <Text style={styles.drawerHeaderText}>NuCamp</Text>
                 </View>
 
@@ -214,8 +214,8 @@ const MainNavigator = createDrawerNavigator(
             screen: LoginNavigator,
             navigationOptions: {
                 drawerLabel: 'Login',
-                drawerIcon: ({tintColor}) => (
-                    <Icon 
+                drawerIcon: ({ tintColor }) => (
+                    <Icon
                         name='sign-in'
                         type='font-awesome'
                         size={24}
@@ -227,8 +227,8 @@ const MainNavigator = createDrawerNavigator(
         Home: {
             screen: HomeNavigator,
             navigationOptions: {
-                drawerIcon: ({tintColor}) => (
-                    <Icon 
+                drawerIcon: ({ tintColor }) => (
+                    <Icon
                         name='home'
                         type='font-awesome'
                         size={24}
@@ -241,8 +241,8 @@ const MainNavigator = createDrawerNavigator(
             screen: ReservationNavigator,
             navigationOptions: {
                 drawerLabel: 'Reserve Campsite',
-                drawerIcon: ({tintColor}) => (
-                    <Icon 
+                drawerIcon: ({ tintColor }) => (
+                    <Icon
                         name='tree'
                         type='font-awesome'
                         size={24}
@@ -254,8 +254,8 @@ const MainNavigator = createDrawerNavigator(
         Directory: {
             screen: DirectoryNavigator,
             navigationOptions: {
-                drawerIcon: ({tintColor}) => (
-                    <Icon 
+                drawerIcon: ({ tintColor }) => (
+                    <Icon
                         name='list'
                         type='font-awesome'
                         size={24}
@@ -268,8 +268,8 @@ const MainNavigator = createDrawerNavigator(
             screen: FavoritesNavigator,
             navigationOptions: {
                 drawerLabel: 'My Favorites',
-                drawerIcon: ({tintColor}) => (
-                    <Icon 
+                drawerIcon: ({ tintColor }) => (
+                    <Icon
                         name='heart'
                         type='font-awesome'
                         size={24}
@@ -282,8 +282,8 @@ const MainNavigator = createDrawerNavigator(
             screen: AboutNavigator,
             navigationOptions: {
                 drawerLabel: 'About Us',
-                drawerIcon: ({tintColor}) => (
-                    <Icon 
+                drawerIcon: ({ tintColor }) => (
+                    <Icon
                         name='info-circle'
                         type='font-awesome'
                         size={24}
@@ -296,8 +296,8 @@ const MainNavigator = createDrawerNavigator(
             screen: ContactNavigator,
             navigationOptions: {
                 drawerLabel: 'Contact Us',
-                drawerIcon: ({tintColor}) => (
-                    <Icon 
+                drawerIcon: ({ tintColor }) => (
+                    <Icon
                         name='address-card'
                         type='font-awesome'
                         size={24}
@@ -317,30 +317,32 @@ const MainNavigator = createDrawerNavigator(
 
 class Main extends Component {
 
-    componentDidMount(){
+    componentDidMount() {
         this.props.fetchCampsites();
         this.props.fetchComments();
         this.props.fetchPromotions();
         this.props.fetchPartners();
+        this.showNetInfo();
+    }
 
-        NetInfo.fetch().then(connectionInfo => {
-            (Platform.OS === 'ios' ) ?
-            Alert.alert('Initial Network Connectivity Type:', connectionInfo.type)
-            : ToastAndroid.show('Initial Network Connectivity Type:' + connectionInfo.type, ToastAndroid.LONG);
-        });
+    showNetInfo = async () => {
+        const connectionInfo = await NetInfo.fetch();
+        (Platform.OS === 'ios') ?
+                Alert.alert('Initial Network Connectivity Type:', connectionInfo.type)
+                : ToastAndroid.show('Initial Network Connectivity Type:' + connectionInfo.type, ToastAndroid.LONG);
 
         this.unsubscribeNetInfo = NetInfo.addEventListener(connectionInfo => {
             this.handleConectivityChange(connectionInfo);
         });
     }
-    
-    componentWillUnmount(){
+
+    componentWillUnmount() {
         this.unsubscribeNetInfo();
     }
 
     handleConectivityChange = connectionInfo => {
         let connectionMsg = 'You are now connected to an active network.';
-        switch(connectionInfo.type){
+        switch (connectionInfo.type) {
             case 'none':
                 connectionMsg = 'No network connection is active.';
                 break;
@@ -384,7 +386,7 @@ const styles = StyleSheet.create({
     drawerHeaderText: {
         color: '#fff',
         fontSize: 24,
-        fontWeight: 'bold' 
+        fontWeight: 'bold'
     },
     drawerImage: {
         margin: 10,
